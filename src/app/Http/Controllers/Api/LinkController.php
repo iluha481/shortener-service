@@ -22,7 +22,7 @@ class LinkController extends Controller
             ]);
         }
 
-        
+
         do {
             $code = Str::random(6);
         } while (Link::where('code', $code)->exists());
@@ -36,5 +36,18 @@ class LinkController extends Controller
             'code' => $link->code,
             'short_url' => url('/' . $link->code),
         ], 201);
+    }
+
+    public function stats(string $code){
+        $link = Link::where('code', $code)->first();
+        if (!$link) {
+            abort(404);
+        }
+        return response()->json([
+            'url' => $link->url,
+            'code' => $link->code,
+            'clicks' => $link->clicks,
+            'created_at' => $link->created_at->utc()->toISOString,
+        ]);
     }
 }
