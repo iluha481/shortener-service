@@ -67,8 +67,8 @@ GET `/api/links/{code}/stats`
 ### Клонирование
 
 ```bash
-git clone <repo-url>
-cd url-shortener-api
+git clone https://github.com/iluha481/shortener-service
+cd shortener-service
 ```
 
 
