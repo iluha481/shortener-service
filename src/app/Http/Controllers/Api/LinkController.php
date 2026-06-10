@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLinkRequest;
 use Illuminate\Http\Request;
@@ -18,13 +18,15 @@ class LinkController extends Controller
         if ($exsisting) {
             return response()->json([
                 'code' => $exsisting->code,
-                'short_url' => $exsisting->url,
+                'short_url' => url('/' . $exsisting->code),
             ]);
         }
 
-        $code = substr(md5($url . time()), 0, 6);
         
-
+        do {
+            $code = Str::random(6);
+        } while (Link::where('code', $code)->exists());
+        
         $link = Link::create([
             'url' => $url,
             'code' => $code,
@@ -32,7 +34,7 @@ class LinkController extends Controller
 
         return response()->json([
             'code' => $link->code,
-            'short_url' => $link->url,
+            'short_url' => url('/' . $link->code),
         ], 201);
     }
 }
